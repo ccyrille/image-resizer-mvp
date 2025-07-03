@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# Image resizer MVP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a demonstration of client-side image processing using React and the [rect-image-file-resizer](https://www.npmjs.com/package/react-image-file-resizer) library. 
 
-## Available Scripts
+The app demonstrates that complex image processing can be done entirely client-side, making it perfect for scenarios where you want to reduce server load or process images offline. You can upload multiple images at once and see the immediate size savings from the compression and resizing process.
 
-In the project directory, you can run:
+# Getting started
 
-### `npm start`
+`npm install; npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Micro benchmark
+This is a micro benchmark but it gives an idea:
+- Cumulated images size: 2,24GB
+- Number of images: 400
+- Computer : Macbook M3
+- Browser : Chrome
+- Duration: 40 secondes
+- Javascript heap size :
+  - before: 52MB
+  - max: 118MB
+- Chrome (render) memory consumption :
+  - before: 175MB
+  - max: 1,7GB
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Notes
 
-### `npm test`
+## Core Functionality
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- File Upload: Multiple image upload via a styled button
+Automatic Resizing: Images are immediately resized to 800x800px max while maintaining aspect ratio
+- Memory Management: Original files are automatically freed from browser memory after processing
+- JPEG Compression: Images are converted to JPEG format with 80% quality for optimal file size
 
-### `npm run build`
+## Key Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Real-time Stats: Shows number of images processed, original size, space saved, and compression ratio
+- Visual Grid: Displays all resized images in a responsive grid layout
+- Individual Controls: Remove specific images or clear all at once
+- Progress Indication: Shows processing state with loading spinner
+- File Size Display: Shows original vs resized file sizes for each image
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technical notes
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- File upload: The original `File` objects are stored in the `files` array from `event.target.files`
+- Processing: Each file is passed to `react-image-file-resizer`
+- Memory: Only the final base64 resized images are kept in state
+- Input clearing: `event.target.value = ''` clears the file input, but this doesn't free the File objects from memory
 
-### `npm run eject`
+## Memory notes
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- The `react-image-file-resizer` library handles most of the internal memory cleanup automatically
+- JavaScript's garbage collector will eventually free the original File objects once there are no more references
+- The most effective cleanup happens when we clear the file input and remove array references, in the handleFileUpload` function:
+  - `javascriptevent.target.value = '';`  clears the file input element
+  - `files.length = 0;` removes all references from the files array
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

@@ -28,7 +28,7 @@ const App = () => {
         (uri) => {
           const originalSize = file.size;
           const resizedSize = Math.round((uri.length * 3) / 4); // Approximate base64 to bytes
-          
+
           resolve({
             id: Date.now() + Math.random(),
             name: file.name,
@@ -73,7 +73,9 @@ const App = () => {
     }));
     
     setIsProcessing(false);
-    event.target.value = ''; // Clear input
+
+    event.target.value = ''; // Clear the file input
+    files.length = 0; // Clear the files array
   };
 
   const removeImage = (id) => {
